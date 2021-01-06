@@ -4,7 +4,7 @@
     <el-header>
       <div>
         <img src="../assets/logo.png" alt />
-        <span>电商后台管理系统</span>
+        <span>在线点餐后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
@@ -30,7 +30,7 @@
                 将index值作为导航路由 -->
               <!-- 二级菜单的模板区域 -->
               <template slot="title">
-                <i class="el-icon-menu"></i>
+                <i :class="iconObj[subItem.id]"></i>
                 <span>{{ subItem.itemname}}</span>
               </template>
             </el-menu-item>
@@ -52,12 +52,30 @@ export default {
       // 左侧菜单数据
       menuList: [],
       iconObj: {
-        '100': 'iconfont icon-user',
-        '200': 'iconfont icon-tijikongjian',
-        '300': 'iconfont icon-shangpin',
-        '400': 'iconfont icon-shangpin',
-        '500': 'iconfont icon-shangpin',
-        '600': 'iconfont icon-danju'
+        '100': 'el-icon-s-shop',
+        '101': 'el-icon-s-shop',
+        '200': 'iconfont icon-shangpin',
+        '201': 'iconfont icon-shangpin',
+        '202': 'el-icon-star-on',
+        '203': 'el-icon-tableware',
+        '204': 'el-icon-dessert',
+        '205': 'el-icon-chicken',
+        '206': 'el-icon-ice-drink',
+        '300': 'el-icon-s-order',
+        '301': 'el-icon-s-order',
+        '302': 'el-icon-s-release',
+        '303': 'el-icon-s-claim',
+        '400': 'iconfont icon-tijikongjian',
+        '401': 'el-icon-dish',
+        '402': 'el-icon-goblet-square-full',
+        '500': 'el-icon-s-tools',
+        '501': 'iconfont icon-users',
+        '502': 'el-icon-s-custom',
+        '503': 'el-icon-bank-card',
+        '600': 'iconfont icon-baobiao',
+        '603': 'el-icon-shopping-cart-full',
+        '602': 'el-icon-box',
+        '601': 'el-icon-data-analysis'
       },
       // 默认不折叠
       isCollapse: false,
@@ -128,7 +146,10 @@ export default {
   background-color: #eaedf1;
 }
 .iconfont{
+  margin-left: 4px;
   margin-right: 10px;
+  font-size:18px;
+  font-style:normal;
 }
 .toggle-button {
   background-color: #4A5064;

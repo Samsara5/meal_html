@@ -22,9 +22,9 @@ const Home = () => import(/* webpackChunkName: "Login_Home_Welcome" */ '../compo
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', redirect: '/login' },
-  { path: '/login', component: Login },
-  { path: '/home', component: Home }
+  {path: '/', redirect: '/login'},
+  {path: '/login', component: Login, meta: {hidden: true, title: "欢迎登录店铺管理后台系统"}},
+  {path: '/home', component: Home, meta: {hidden: true, title: "店铺管理"}}
   // { path: '/home',
   //   component: Home,
   //   redirect: '/Welcome',
@@ -49,6 +49,11 @@ const router = new VueRouter({
 
 // 挂载路由导航守卫,to表示将要访问的路径，from表示从哪里来，next是下一个要做的操作 next('/login')强制跳转login
 router.beforeEach((to, from, next) => {
+  // 设置标签标题
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
   // 访问登录页，放行
   if (to.path === '/login') return next()
   // 获取token
