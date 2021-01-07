@@ -78,7 +78,8 @@ export default {
         //   1.1 项目中出现了登录之外的其他API接口，必须在登陆之后才能访问
         //   1.2 token 只应在当前网站打开期间生效，所以将token保存在sessionStorage中
         window.sessionStorage.setItem('token', res.extend.Token)
-        // 2、通过编程式导航跳转到后台主页, 路由地址为：/home
+        // 2、通过编程式导航跳转到后台店铺信息页, 路由地址为：/home/info
+        window.sessionStorage.setItem('activePath', "/home/info")
         this.$router.push('/home')
       })
     }
