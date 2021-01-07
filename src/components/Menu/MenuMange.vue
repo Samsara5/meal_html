@@ -9,7 +9,7 @@
 
     <h2>全部菜品信息：</h2>
     <el-card>
-      <el-table :data="menuList" border stripe style="font-size: 16px;align-content:center;">
+      <el-table :data="queryInfo.list" border stripe style="font-size: 16px;align-content:center;">
         <!-- stripe: 斑马条纹
         border：边框-->
         <el-table-column type="index" label="#"></el-table-column>
@@ -17,13 +17,17 @@
         <el-table-column prop="mimageurl" label="图片"></el-table-column>
         <el-table-column label="剩余数量">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.mnumber<5" type="danger" effect="dark">{{scope.row.mnumber}}</el-tag>
-            <el-tag v-else type="success" effect="dark" >{{scope.row.mnumber}}</el-tag>
+            <el-tag v-if="scope.row.mnumber<5" type="danger" effect="dark">{{scope.row.mnumber}}/{{scope.row.mnuit}}</el-tag>
+            <el-tag v-else type="success" effect="dark" >{{scope.row.mnumber}}/{{scope.row.mnuit}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="mpirce" label="价格"></el-table-column>
-        <el-table-column prop="mtype" label="分类"></el-table-column>
-        <el-table-column label="特色菜">
+        <el-table-column  label="价格">
+          <template slot-scope="scope">
+           ￥{{scope.row.mpirce}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="mtypename" label="分类"></el-table-column>
+        <el-table-column label="特色菜设置">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.mischara"
                        active-value = 'true'
@@ -52,11 +56,13 @@
       </el-table>
     </el-card>
     <el-pagination
-        :current-page="queryInfo.pagenum"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryCondition.pn"
         :page-sizes="[2, 5, 10, 15]"
-        :page-size="queryInfo.pagesize"
+        :page-size="queryCondition.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="20"
+        :total="queryInfo.total"
     ></el-pagination>
   </div>
 </template>
@@ -65,41 +71,70 @@
   export default {
     data() {
       return {
-        menuList: [],
-        queryInfo: {
-          query: '',
-          // 当前页数
-          pagenum: 1,
-          // 每页显示多少数据
-          pagesize: 5,
-          // 总记录数
-          total:''
+        //获取的菜单数据
+        queryInfo: {},
+        //获取菜单的条件绑定
+        queryCondition:{
+          pn:'',
+          size:''
+        },
+        //修改菜单的对象
+        menuObject:{
+          mid: '',
+          mimageurl: '',
+          mischara: '',
+          mmateria: '',
+          mname: '',
+          mnuit: '',
+          mnumber: '',
+          mpirce: '',
+          mtypeid: '',
+          mtypename: ''
         }
+
       }
     },
     created() {
       this.getmenuList()
     },
     methods: {
+      //获取菜单信息
       async getmenuList() {
-        const {data: res} = await this.$http.get('menu/getallmenus')
+        const {data: res} = await this.$http.get('menu/getallmenus',{
+          params: this.queryCondition
+        })
         if (res.code != 200) this.$message.error("获取菜单失败")
-        this.menuList = res.extend.menus.list
-        this.getPageInfo(res.extend.menus)
-        console.log(this.menuList)
+        this.queryInfo = res.extend.menus
+        this.queryCondition.pn = this.queryInfo.pageNum
+        this.queryCondition.size = this.queryInfo.pageSize
       },
-      async charaStateChange(menuInfo) {
-        //  const { data: res } = await this.$http.put(
-        //      `users/${menuInfo.mischara}/state/${userInfo.mg_state}`
-        //  )
-        //  if (res.meta.status !== 200) {
-        //    userInfo.mg_state = !userInfo.mg_state
-        //    return this.$message.error('更新用户状态失败')
-        //  }
-        //  this.$message.success('更新用户状态成功！')
-        // }
-        console.log(menuInfo)
+      //修改菜单信息
+
+      // 监听 pagesize改变的事件
+      handleSizeChange (newSize) {
+        this.queryCondition.size = newSize
+        this.getmenuList()
       },
+      // 监听 页码值 改变事件
+      handleCurrentChange (newSize) {
+        this.queryCondition.pn = newSize
+        this.getmenuList()
+      },
+      // 监听 switch开关 状态改变
+      async charaStateChange (menuinfo) {
+        this.menuObject = menuinfo
+        const { data: res } = await this.$http.post(
+            'menu/updatemenu',this.menuObject
+        )
+        if (res.code !== 200) {
+          menuinfo.mischara = !menuinfo.mischara
+          return this.$message.error('特色菜设置失败')
+        }
+        if (menuinfo.mischara != 'true'){
+          return  this.$message.success('取消特色菜成功！')
+        }
+        this.$message.success('设置特色菜成功！')
+      }
     }
   }
 </script>
