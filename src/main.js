@@ -31,6 +31,7 @@ axios.interceptors.request.use(config => {
     // 在最后必须 return config
     return config
 })
+
 // response 拦截器中,  隐藏进度条NProgress.done()
 axios.interceptors.response.use(config => {
     NProgress.done()
@@ -38,6 +39,26 @@ axios.interceptors.response.use(config => {
 })
 // 挂在到Vue实例，后面可通过this调用
 Vue.prototype.$http = axios
+
+// 下载全局方法
+Vue.prototype.$download = (res, downloadName = '') => {
+    let blob = new Blob([res], { type: res.type })
+    let downloadElement = document.createElement('a')
+    // 创建下载的链接
+    let href = window.URL.createObjectURL(blob)
+    downloadElement.href = href
+    // 下载后文件名
+    if (downloadName) {
+        downloadElement.download = downloadName
+    }
+    document.body.appendChild(downloadElement)
+    // 点击下载
+    downloadElement.click()
+    // 下载完成移除元素
+    document.body.removeChild(downloadElement)
+    // 释放blob对象
+    window.URL.revokeObjectURL(href)
+}
 
 Vue.config.productionTip = false
 // 组件全局注册 表格树
