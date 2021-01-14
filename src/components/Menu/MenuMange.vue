@@ -14,7 +14,15 @@
           <a href="http://localhost:8081/system/getmenuimporttemplate" target="_blank"
              style="color: white;text-decoration: none;">下载模板</a>
         </el-button>
-        <el-button type="primary" @click="uploadData">使用Excel导入菜单数据</el-button>
+        <el-upload
+            action="https://jsonplaceholder.typicode.com/posts/"
+            multiple
+            :limit="10"
+            :on-exceed="getMessage"
+            :file-list="fileList"
+        style="display: inline-block;margin-left: 10px;margin-right: 10px">
+          <el-button type="primary">使用Excel导入菜单数据</el-button>
+        </el-upload>
         <el-button type="success" @click="showAddDialog">新增数据</el-button>
         <el-button type="danger" @click="changeDeleteState(true)" v-if="!this.isDeleteAbel">确认删除</el-button>
         <el-button type="danger" @click="changeDeleteState" v-else>批量删除菜单</el-button>
@@ -26,7 +34,11 @@
         border：边框-->
         <el-table-column label="#" type="index"></el-table-column>
         <el-table-column label="菜品名" prop="mname"></el-table-column>
-        <el-table-column label="图片" prop="mimageurl"></el-table-column>
+        <el-table-column label="图片">
+          <template slot-scope="scope">
+          <el-image :key="scope.row.mimageurl" :src="'http://localhost:8081/system/getMenuImage?menuId='+scope.row.mid" ></el-image>
+          </template>
+        </el-table-column>
         <el-table-column label="剩余数量">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.mnumber<5" effect="dark" type="danger">
@@ -41,7 +53,11 @@
           </template>
         </el-table-column>
         <el-table-column label="分类" prop="mtypename"></el-table-column>
-        <el-table-column label="材料" prop="mmateria"></el-table-column>
+        <el-table-column label="材料">
+          <template slot-scope="scope">
+          {{storeNames[scope.row.mmateria]}}
+          </template>
+        </el-table-column>
         <el-table-column label="特色菜设置">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.mischara"
@@ -188,11 +204,14 @@ export default {
     return {
       //获取的菜单数据
       queryInfo: {},
+      //获取的材料名称数据
+      storeNames:{},
       //获取菜单的条件绑定
       queryCondition: {
         pn: '',
         size: ''
       },
+      fileList:[],
       //修改菜单的对象
       menuObject: {
         mid: '',
@@ -223,6 +242,7 @@ export default {
   created() {
     this.getMenuList()
     this.getMenuTypeList()
+    this.getStoreNames()
   },
   methods: {
     //获取菜单信息
@@ -230,10 +250,16 @@ export default {
       const {data: res} = await this.$http.get('menu/getallmenus', {
         params: this.queryCondition
       })
-      if (res.code !== 200) this.$message.error("获取菜单失败")
+      if (res.code !== 200) return this.$message.error("获取菜单失败")
       this.queryInfo = res.extend.menus
       this.queryCondition.pn = this.queryInfo.pageNum
       this.queryCondition.size = this.queryInfo.pageSize
+    },
+    //获取材料名称
+    async getStoreNames(){
+      const {data: res} = await this.$http.get('store/getStoreNames')
+      if (res.code!== 200) return this.$message.error("获取材料信息失败")
+      this.storeNames = res.extend.stores;
     },
     //获取菜单分类
     async getMenuTypeList() {
@@ -334,9 +360,6 @@ export default {
       this.$message.success('删除菜单成功！')
       this.getMenuList()
     },
-    uploadData() {
-      console.log(2)
-    },
     // 识别批量删除
     async changeDeleteState(condition) {
       if (condition == true) {
@@ -358,11 +381,17 @@ export default {
     // 刷新页面
     refresh() {
       this.$router.go(0);
+    },
+    //上传文件 批量导入
+    uploadData() {
+      this.$refs.upload.submit();
+    },
+    getMessage(){
+      console.log("成功!")
     }
   }
 }
 </script>
-
 <style lang="less" scoped>
 
 </style>

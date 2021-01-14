@@ -16,6 +16,7 @@ import {
     Form,
     FormItem,
     Header,
+    Image,
     Input,
     Link,
     Main,
@@ -49,6 +50,7 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
 Vue.use(Link)
+Vue.use(Image)
 // 将弹框组件全局挂在到VUe原形实例
 Vue.prototype.$message = Message
 Vue.use(Container)
