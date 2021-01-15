@@ -2,21 +2,23 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // 路由懒加载
-const Login = () => import(/* webpackChunkName: "Login_Home_Welcome" */ '../components/Login.vue')
-const Home = () => import(/* webpackChunkName: "Login_Home_Welcome" */ '../components/Home.vue')
-const Welcome = () => import(/* webpackChunkName: "Login_Home_Welcome" */ '../components/welcome.vue')
-const MenuMange = () => import(/* webpackChunkName: "Users_Rights_Roles" */ '../components/Menu/MenuMange')
-// const Rights = () => import(/* webpackChunkName: "Users_Rights_Roles" */ '../components/power/Rights.vue')
-// const Roles = () => import(/* webpackChunkName: "Users_Rights_Roles" */ '../components/power/Roles.vue')
-//
-// const Cate = () => import(/* webpackChunkName: "Cate_Params" */ '../components/goods/Cate.vue')
-// const Params = () => import(/* webpackChunkName: "Cate_Params" */ '../components/goods/Params.vue')
-//
-// const GoodsList = () => import(/* webpackChunkName: "GoodsList_Add" */ '../components/goods/List.vue')
-// const Add = () => import(/* webpackChunkName: "GoodsList_Add" */ '../components/goods/Add.vue')
-//
-// const Order = () => import(/* webpackChunkName: "Order_Report" */ '../components/order/Order.vue')
-// const Report = () => import(/* webpackChunkName: "Order_Report" */ '../components/report/Report.vue')
+const Login = () => import('../components/Login.vue')
+const Home = () => import('../components/Home.vue')
+const Welcome = () => import('../components/welcome.vue')
+const MenuMange = () => import('../components/Menu/MenuMange')
+const MainType = () => import('../components/Menu/MainType')
+const SpecialType = () => import('../components/Menu/SpecialType')
+const SnackType = () => import('../components/Menu/SnackType')
+const SetType = () => import('../components/Menu/SetType')
+const DrinkType = () => import('../components/Menu/DrinkType')
+const FinishOrders = () => import('../components/Order/FinishOrders')
+const TotalOrders = () => import('../components/Order/TotalOrders')
+const UnfinishedOrders = () => import('../components/Order/UnfinishedOrders')
+const OrderReport = () => import('../components/Report/OrderReport')
+const SellReport = () => import('../components/Report/SellReport')
+const StoreReport = () => import('../components/Report/StoreReport')
+const DrinkList = () => import('../components/Store/DrinkList')
+const MaterialList = () => import('../components/Store/MaterialList')
 
 Vue.use(VueRouter)
 
@@ -30,26 +32,26 @@ const routes = [
         meta: {hidden: true, title: "店铺管理"},
         children: [
             {path: '/info', component: Welcome, meta: {hidden: true, title: "欢迎进入店铺管理系统"}},
-            {path: '/menu/menumange', component: MenuMange, meta: {hidden: true, title: "全部菜品"}}
+            {path: '/menu/menumange', component: MenuMange, meta: {hidden: true, title: "全部菜品"}},
+            {path: '/menu/special', component: SpecialType, meta: {hidden: true, title: "特色菜类别"}},
+            {path: '/menu/maocai', component: MainType, meta: {hidden: true, title: "冒菜类别"}},
+            {path: '/menu/setmeal', component: SetType, meta: {hidden: true, title: "套餐类别"}},
+            {path: '/menu/drink', component: DrinkType, meta: {hidden: true, title: "酒水类别"}},
+            {path: '/menu/snack', component: SnackType, meta: {hidden: true, title: "小吃类别"}},
+            {path: '/order/total', component: TotalOrders, meta: {hidden: true, title: "总订单情况"}},
+            {path: '/order/ordered', component: UnfinishedOrders, meta: {hidden: true, title: "未完成订单情况"}},
+            {path: '/order/done', component: FinishOrders, meta: {hidden: true, title: "已完成订单情况"}},
+            {path: '/store/materiallist', component: MaterialList, meta: {hidden: true, title: "食材库存"}},
+            {path: '/store/drinklist', component: DrinkList, meta: {hidden: true, title: "酒水库存"}},
+            {path: '/shop/user', component: MenuMange, meta: {hidden: true, title: "用户管理"}},
+            {path: '/shop/employeelist', component: MenuMange, meta: {hidden: true, title: "员工管理"}},
+            {path: '/shop/salary', component: MenuMange, meta: {hidden: true, title: "薪资管理"}},
+            {path: '/dataanalysis/order', component: OrderReport, meta: {hidden: true, title: "订单报表"}},
+            {path: '/dataanalysis/store', component: StoreReport, meta: {hidden: true, title: "存储报表"}},
+            {path: '/dataanalysis/sell', component: SellReport, meta: {hidden: true, title: "销售报表"}}
         ]
 
     }
-    // { path: '/home',
-    //   component: Home,
-    //   redirect: '/info',
-    //   children: [
-    //     { path: '/home', component: Welcome },
-    //     { path: '/users', component: Users },
-    //     { path: '/rights', component: Rights },
-    //     { path: '/roles', component: Roles },
-    //     { path: '/categories', component: Cate },
-    //     { path: '/params', component: Params },
-    //     { path: '/goods', component: GoodsList },
-    //     { path: '/goods/add', component: Add },
-    //     { path: '/orders', component: Order },
-    //     { path: '/reports', component: Report }
-    //   ] }
-
 ]
 
 const router = new VueRouter({
