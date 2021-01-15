@@ -14,14 +14,15 @@
           <a href="http://localhost:8081/system/getmenuimporttemplate" target="_blank"
              style="color: white;text-decoration: none;">下载模板</a>
         </el-button>
+<!--        action="http://localhost:8081/menu/importmenusbyexcel"-->
         <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="none"
+            :auto-upload="false"
+            :on-change="checkType"
+            :show-file-list="false"
             multiple
-            :limit="10"
-            :on-exceed="getMessage"
-            :file-list="fileList"
         style="display: inline-block;margin-left: 10px;margin-right: 10px">
-          <el-button type="primary">使用Excel导入菜单数据</el-button>
+          <el-button type="primary" >使用Excel导入菜单数据</el-button>
         </el-upload>
         <el-button type="success" @click="showAddDialog">新增数据</el-button>
         <el-button type="danger" @click="changeDeleteState(true)" v-if="!this.isDeleteAbel">确认删除</el-button>
@@ -211,7 +212,6 @@ export default {
         pn: '',
         size: ''
       },
-      fileList:[],
       //修改菜单的对象
       menuObject: {
         mid: '',
@@ -236,7 +236,10 @@ export default {
       // 菜单类别
       menuType: {},
       //选中的菜单类型id 修改，新增时使用
-      selectMenuTypeId: ""
+      selectMenuTypeId: "",
+      //导入excel
+      fileObj:{},
+      excelFileUrl:'http://localhost:8081/menu/importmenusbyexcel',
     }
   },
   created() {
@@ -268,6 +271,10 @@ export default {
         return this.$message.error('查询菜单类别信息失败！')
       }
       this.menuType = res.extend.MenuTypes
+    },
+    // 刷新页面
+    refresh() {
+      this.$router.go(0);
     },
     //展示新增模态框
     async showAddDialog() {
@@ -378,17 +385,19 @@ export default {
       this.removeIdList.unshift(id)
       console.log(this.removeIdList)
     },
-    // 刷新页面
-    refresh() {
-      this.$router.go(0);
-    },
     //上传文件 批量导入
-    uploadData() {
-      this.$refs.upload.submit();
+   async checkType(file,fileList) {
+      let data = new FormData()
+     this.fileObj = file
+      data.append("file",this.fileObj.raw)
+      // this.$refs.upload.submit();
+      const {data: res} = await this.$http.post('/menu/importmenusbyexcel', data)
+     if (res !== '导入成功'){
+      return this.$message.error(res)
+     }
+     this.$message.success(res)
+     this.refresh()
     },
-    getMessage(){
-      console.log("成功!")
-    }
   }
 }
 </script>
