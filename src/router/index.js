@@ -14,11 +14,15 @@ const DrinkType = () => import('../components/Menu/DrinkType')
 const FinishOrders = () => import('../components/Order/FinishOrders')
 const TotalOrders = () => import('../components/Order/TotalOrders')
 const UnfinishedOrders = () => import('../components/Order/UnfinishedOrders')
+const DrinkList = () => import('../components/Store/DrinkList')
+const MaterialList = () => import('../components/Store/MaterialList')
+const EmployeeManage = () =>import('../components/Manage/EmployeeManage')
+const SalaryManage = () =>import('../components/Manage/SalaryManage')
+const UserManage = () =>import('../components/Manage/UserManage')
 const OrderReport = () => import('../components/Report/OrderReport')
 const SellReport = () => import('../components/Report/SellReport')
 const StoreReport = () => import('../components/Report/StoreReport')
-const DrinkList = () => import('../components/Store/DrinkList')
-const MaterialList = () => import('../components/Store/MaterialList')
+
 
 Vue.use(VueRouter)
 
@@ -43,9 +47,9 @@ const routes = [
             {path: '/order/done', component: FinishOrders, meta: {hidden: true, title: "已完成订单情况"}},
             {path: '/store/materiallist', component: MaterialList, meta: {hidden: true, title: "食材库存"}},
             {path: '/store/drinklist', component: DrinkList, meta: {hidden: true, title: "酒水库存"}},
-            {path: '/shop/user', component: MenuMange, meta: {hidden: true, title: "用户管理"}},
-            {path: '/shop/employeelist', component: MenuMange, meta: {hidden: true, title: "员工管理"}},
-            {path: '/shop/salary', component: MenuMange, meta: {hidden: true, title: "薪资管理"}},
+            {path: '/shop/user', component: UserManage, meta: {hidden: true, title: "用户管理"}},
+            {path: '/shop/employeelist', component: EmployeeManage, meta: {hidden: true, title: "员工管理"}},
+            {path: '/shop/salary', component: SalaryManage, meta: {hidden: true, title: "薪资管理"}},
             {path: '/dataanalysis/order', component: OrderReport, meta: {hidden: true, title: "订单报表"}},
             {path: '/dataanalysis/store', component: StoreReport, meta: {hidden: true, title: "存储报表"}},
             {path: '/dataanalysis/sell', component: SellReport, meta: {hidden: true, title: "销售报表"}}
@@ -64,7 +68,6 @@ router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title
     }
-    next()
     // 访问登录页，放行
     if (to.path === '/login') return next()
     // 获取token

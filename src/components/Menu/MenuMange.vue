@@ -14,7 +14,6 @@
           <a href="http://localhost:8081/system/getmenuimporttemplate" target="_blank"
              style="color: white;text-decoration: none;">下载模板</a>
         </el-button>
-<!--        action="http://localhost:8081/menu/importmenusbyexcel"-->
         <el-upload
             action="none"
             :auto-upload="false"

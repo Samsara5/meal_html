@@ -80,6 +80,7 @@ export default {
         window.sessionStorage.setItem('token', res.extend.Token)
         // 2、通过编程式导航跳转到后台店铺信息页, 路由地址为：/home/info
         window.sessionStorage.setItem('activePath', "/home/info")
+        window.sessionStorage.setItem('username',this.loginForm.eusername)
         this.$router.push('/home')
       })
     }

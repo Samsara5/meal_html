@@ -6,7 +6,20 @@
         <img src="../assets/logo.png" alt />
         <span>在线点餐后台管理系统</span>
       </div>
-      <el-button type="info" @click="logout">退出</el-button>
+      <span style="width: 400px;margin-right: -80px">
+        <el-row>
+          <el-col :span="8" >
+             <img src="../assets/logo.png" style="width: 25px;height:25px;">
+            <span style="font-size: 18px;margin-left: 10px;height:25px;margin-top: -10px">{{username}}</span>
+          </el-col>
+          <el-col :span="8">
+             <i class="el-icon-bell" style="font-size: 18px">通知</i>
+          </el-col>
+          <el-col :span="8">
+            <el-button type="info" @click="logout">退出</el-button>
+          </el-col>
+        </el-row>
+      </span>
     </el-header>
     <!-- 主体 -->
     <el-container>
@@ -80,12 +93,14 @@ export default {
       // 默认不折叠
       isCollapse: false,
       // 被激活导航地址
-      activePath: ''
+      activePath: '',
+      username:''
     }
   },
   created () {
     this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
+    this.username = window.sessionStorage.getItem("username")
   },
   methods: {
     logout () {
