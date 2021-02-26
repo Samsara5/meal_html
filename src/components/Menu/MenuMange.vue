@@ -141,11 +141,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <span slot="footer" class="dialog-footer">
+      </el-form>
+      <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addMenu">确 定</el-button>
       </span>
-      </el-form>
     </el-dialog>
     <!-- 修改菜单的对话框 -->
     <el-dialog
@@ -190,11 +190,11 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+    </el-dialog>
+    <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="editMenu">确 定</el-button>
       </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -396,7 +396,7 @@ export default {
      }
      this.$message.success(res)
      this.refresh()
-    },
+    }
   }
 }
 </script>
